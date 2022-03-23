@@ -16,6 +16,11 @@ body {
   font-family: "Montserrat", sans-serif;
 }
 
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 @media (min-width: 768px) {
   body {
     font-size: 16px;

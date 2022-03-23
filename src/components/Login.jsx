@@ -98,7 +98,6 @@ const SignUp = styled.a`
   border: 1px solid transparent;
   border-radius: 4px;
   user-select: none;
-  cursor: pointer;
 
   &:hover {
     background-color: #0483ee;
