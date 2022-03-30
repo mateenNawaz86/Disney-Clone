@@ -6,6 +6,7 @@ import Orignals from "./Orignals";
 import Recommends from "./Recommends";
 import Trending from "./Trending";
 import Viewers from "./Viewers";
+
 import { useSelector, useDispatch } from "react-redux";
 import { movieAction } from "../features/movies/MovieSlice";
 import db from "../firebase";

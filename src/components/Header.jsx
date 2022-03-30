@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.user.name);
-  const userEmail = useSelector((state) => state.user.email);
   const userPhoto = useSelector((state) => state.user.photo);
   const navigate = useNavigate();
 
