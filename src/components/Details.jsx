@@ -1,21 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
 import styled from "styled-components";
 
 const Details = () => {
+  const { id } = useParams();
+  const [detailData, setDetailData] = useState({});
+
+  useEffect(() => {
+    db.collection("movies")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setDetailData(doc.data());
+        } else {
+          console.log("No such documents in firebase 🔥");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [id]);
   return (
     <Container>
       <Background>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/4E9E81584305009D6385F6178D4B6930E97CD6EC4A3B53C818400DEF778FFA9A/scale?width=1440&aspectRatio=1.78&format=jpeg"
-          alt="product-img"
-        />
+        <img src={detailData.backgroundImg} alt={detailData.title} />
       </Background>
 
       <ImgTitle>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/50B933E83609BEEFEDFA177A6D96DBFA7804C14F70A0B5AB314E892E65498ACF/scale?width=1440&aspectRatio=1.78"
-          alt="img-title"
-        />
+        <img src={detailData.titleImg} alt={detailData.title} />
       </ImgTitle>
 
       <ControlMeta>
@@ -28,7 +42,21 @@ const Details = () => {
             <img src="/images/play-icon-white.png" alt="trailer" />
             <span>Trailer</span>
           </Trailer>
+
+          <AddList>
+            <span></span>
+            <span></span>
+          </AddList>
+
+          <UserGroup>
+            <div>
+              <img src="/images/group-icon.png" alt="group" />
+            </div>
+          </UserGroup>
         </Controls>
+
+        <Subtitle>{detailData.subTitle}</Subtitle>
+        <Description>{detailData.description}</Description>
       </ControlMeta>
     </Container>
   );
@@ -46,7 +74,7 @@ const Container = styled.div`
 
 // Background styled-component
 const Background = styled.div`
-  opacity: 0.7;
+  opacity: 0.6;
   position: fixed;
   top: 0;
   left: 0;
@@ -98,7 +126,7 @@ const Controls = styled.div`
 // Player styled-component
 const Player = styled.button`
   font-size: 15px;
-  margin: 0 25px 0;
+  margin: 0 25px 0 0px;
   padding: 0 24px;
   height: 56px;
   border-radius: 5px;
@@ -124,7 +152,7 @@ const Player = styled.button`
     height: 45px;
     font-size: 12px;
     padding: 0 10px;
-    margin: 0 22px 0;
+    margin: 0 16px 0;
 
     img {
       width: 25px;
@@ -138,6 +166,106 @@ const Trailer = styled(Player)`
   color: rgb(249, 249, 249);
   border: 1px solid rgba(151, 151, 151, 0.34);
   margin: 0;
+
+  &:hover {
+    color: #000;
+  }
+`;
+
+// AddList styled-component
+const AddList = styled.div`
+  margin: 0 16px 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #f08080;
+  }
+
+  span {
+    background-color: rgb(249, 249, 249);
+    display: inline-block;
+
+    &:first-child {
+      height: 2px;
+      width: 16px;
+      transform: translate(1px, 0px) rotate(0deg);
+    }
+
+    &:nth-child(2) {
+      height: 16px;
+      width: 2px;
+      transform: translate(-8px) rotate(0deg);
+    }
+  }
+
+  @media (max-width: 390px) {
+    visibility: hidden;
+  }
+`;
+
+// UserGroup styled-component
+const UserGroup = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #f08080;
+  }
+
+  div {
+    height: 40px;
+    width: 40px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  @media (max-width: 390px) {
+    visibility: hidden;
+  }
+`;
+
+// Subtitle styled-component
+const Subtitle = styled.div`
+  font-size: 1rem;
+  color: rgb(249, 249, 249);
+  min-height: 20px;
+  user-select: none;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+`;
+
+// Description styled-component
+const Description = styled.div`
+  font-size: 18px;
+  line-height: 1.7;
+  padding: 16px 0;
+  letter-spacing: 0.6px;
+  color: rgb(249, 249, 249);
+  user-select: none;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export default Details;
